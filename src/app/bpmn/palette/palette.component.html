@@ -1,0 +1,25 @@
+<aside class="palette">
+  <div class="palette__head">
+    <span class="palette__title">Elements</span>
+    <span class="palette__hint">Drag onto the canvas</span>
+  </div>
+
+  @for (section of sections; track section) {
+    <section class="palette__section">
+      <h3 class="palette__section-title">{{ section }}</h3>
+      <div class="palette__grid">
+        @for (entry of entriesFor(section); track entry.label) {
+          <ng-diagram-palette-item [item]="entry.item">
+            <div class="tile" [title]="entry.label">
+              <div class="tile__art" [innerHTML]="entry.svg"></div>
+              <div class="tile__label">{{ entry.label }}</div>
+            </div>
+            <ng-diagram-palette-item-preview>
+              <div class="tile-preview" [innerHTML]="entry.svg"></div>
+            </ng-diagram-palette-item-preview>
+          </ng-diagram-palette-item>
+        }
+      </div>
+    </section>
+  }
+</aside>

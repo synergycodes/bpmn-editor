@@ -1,0 +1,263 @@
+/* ============================================================================
+   BPMN Editor — design tokens (Synergy Codes brand)
+
+   Two tiers so a re-skin is a one-token swap:
+   · Tier 1 PRIMITIVES  — raw ramps (purple brand + lime accent + neutral gray),
+     aligned with the ngDiagram design system (its accent, acc1, is #9140ff).
+   · Tier 2 SEMANTIC (--c-*) — per-theme aliases. Components use ONLY these.
+
+   Light is the default (:root); dark overrides on html[data-theme='dark'] —
+   the attribute ng-diagram keys its own --ngd-* theme on, so brand + engine
+   flip together. Layout tokens (type/spacing/radii/motion/z) are theme-neutral.
+   ========================================================================== */
+
+:root {
+  /* -- Type ----------------------------------------------------- */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+
+  --fs-10: 10px;
+  --fs-11: 11px;
+  --fs-12: 12px;
+  --fs-13: 13px; /* default UI */
+  --fs-14: 14px;
+  --fs-16: 16px;
+  --fs-18: 18px;
+  --fs-20: 20px;
+  --fs-24: 24px;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semi: 600;
+  --fw-bold: 700;
+
+  --lh-tight: 1.15;
+  --lh-snug: 1.3;
+  --lh-normal: 1.5;
+
+  /* -- Spacing (2px base) --------------------------------------- */
+  --s-1: 2px;
+  --s-2: 4px;
+  --s-3: 6px;
+  --s-4: 8px;
+  --s-5: 10px;
+  --s-6: 12px;
+  --s-8: 16px;
+  --s-10: 20px;
+  --s-12: 24px;
+  --s-16: 32px;
+  --s-20: 40px;
+
+  /* -- Radii ---------------------------------------------------- */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --r-full: 999px;
+
+  /* -- Sizes ---------------------------------------------------- */
+  --h-header: 52px;
+  --w-palette: 248px;
+  --h-control: 30px;
+  --h-control-sm: 26px;
+
+  /* -- Motion --------------------------------------------------- */
+  --t-fast: 120ms cubic-bezier(0.2, 0.6, 0.2, 1);
+  --t-normal: 180ms cubic-bezier(0.2, 0.6, 0.2, 1);
+
+  /* -- Z-index -------------------------------------------------- */
+  --z-canvas: 0;
+  --z-panel: 10;
+  --z-header: 20;
+  --z-popover: 40;
+}
+
+/* ============================================================================
+   TIER 1 · PRIMITIVES — theme-independent ramps.
+   ========================================================================== */
+:root {
+  /* Neutral · gray (mirrors ngDiagram gray ramp) */
+  --prim-gray-100: #ffffff;
+  --prim-gray-200: #f7f7f8;
+  --prim-gray-300: #eceef2;
+  --prim-gray-400: #d7dae1;
+  --prim-gray-450: #b9bec9;
+  --prim-gray-500: #767b87;
+  --prim-gray-600: #4c4f57;
+  --prim-gray-650: #34363c;
+  --prim-gray-700: #27282b;
+  --prim-gray-800: #17181b;
+  --prim-gray-900: #0c0d0f;
+
+  --prim-gray-900-5: rgba(12, 13, 15, 0.05);
+  --prim-gray-900-10: rgba(12, 13, 15, 0.1);
+  --prim-gray-100-5: rgba(255, 255, 255, 0.05);
+  --prim-gray-100-10: rgba(255, 255, 255, 0.1);
+
+  /* Brand · purple (ngDiagram acc1 = #9140ff) */
+  --prim-purple-50: #f4eeff;
+  --prim-purple-100: #e7d9ff;
+  --prim-purple-200: #cbb0ff;
+  --prim-purple-300: #a977ff;
+  --prim-purple-400: #9556ff;
+  --prim-purple-500: #9140ff;
+  --prim-purple-600: #7d1fff;
+  --prim-purple-700: #6a12e6;
+  --prim-purple-800: #5210b0;
+  --prim-purple-900: #390b7a;
+  --prim-purple-500-16: rgba(145, 64, 255, 0.16);
+  --prim-purple-500-40: rgba(145, 64, 255, 0.4);
+
+  /* Accent · lime / chartreuse (Synergy Codes secondary) */
+  --prim-lime-300: #dcf87a;
+  --prim-lime-400: #cbf24a;
+  --prim-lime-500: #b6e619;
+  --prim-lime-600: #96c40d;
+  --prim-lime-700: #74980c;
+
+  /* Status */
+  --prim-red-500: #ef4444;
+  --prim-amber-500: #f59e0b;
+  --prim-green-500: #22c55e;
+  --prim-blue-500: #3b82f6;
+}
+
+/* ============================================================================
+   TIER 2 · SEMANTIC — light theme (default).
+   ========================================================================== */
+:root,
+html[data-theme='light'] {
+  --c-bg: var(--prim-gray-300);
+  --c-surface: var(--prim-gray-200);
+  --c-surface-2: var(--prim-gray-100);
+  --c-surface-3: var(--prim-gray-300);
+  --c-canvas: var(--prim-gray-200);
+
+  --c-field-bg: var(--prim-gray-100);
+  --c-border: var(--prim-gray-400);
+  --c-border-strong: var(--prim-gray-450);
+  --c-divider: var(--prim-gray-300);
+
+  --c-text: var(--prim-gray-800);
+  --c-text-2: var(--prim-gray-600);
+  --c-text-3: var(--prim-gray-500);
+  --c-text-inv: var(--prim-gray-100);
+
+  /* Brand */
+  --c-brand: var(--prim-purple-500);
+  --c-brand-hover: var(--prim-purple-600);
+  --c-brand-tint: var(--prim-purple-500-16);
+  --c-on-brand: var(--prim-gray-100);
+
+  /* Accent (lime) */
+  --c-accent: var(--prim-lime-600);
+  --c-accent-strong: var(--prim-lime-700);
+  --c-on-accent: var(--prim-gray-900);
+
+  --c-focus-ring: var(--prim-purple-500-40);
+  --c-node-hover: var(--prim-gray-900-5);
+
+  /* BPMN element palette (domain colors) */
+  --c-bpmn-event-start: var(--prim-green-500);
+  --c-bpmn-event-end: var(--prim-red-500);
+  --c-bpmn-task: var(--prim-blue-500);
+  --c-bpmn-gateway: var(--prim-amber-500);
+  --c-bpmn-node-fill: var(--prim-gray-100);
+  --c-bpmn-node-stroke: var(--prim-gray-600);
+  --c-bpmn-node-text: var(--prim-gray-800);
+
+  /* Swimlane */
+  --c-lane-header: var(--prim-gray-300);
+  --c-lane-header-text: var(--prim-gray-700);
+  --c-lane-body: rgba(255, 255, 255, 0.35);
+  --c-lane-border: var(--prim-gray-450);
+
+  /* Edges */
+  --c-edge: var(--prim-gray-600);
+  --c-edge-message: var(--prim-purple-500);
+  --c-edge-association: var(--prim-gray-500);
+
+  --sh-sm: 0 1px 2px rgba(17, 24, 39, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  --sh-md: 0 6px 20px rgba(17, 24, 39, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+/* ============================================================================
+   TIER 2 · SEMANTIC — dark theme. Synergy Codes is dark-first: graphite chrome,
+   near-black canvas, vivid purple + lime accents.
+   ========================================================================== */
+html[data-theme='dark'] {
+  --c-bg: var(--prim-gray-900);
+  --c-surface: var(--prim-gray-800);
+  --c-surface-2: var(--prim-gray-700);
+  --c-surface-3: var(--prim-gray-650);
+  --c-canvas: var(--prim-gray-800);
+
+  --c-field-bg: var(--prim-gray-900);
+  --c-border: var(--prim-gray-650);
+  --c-border-strong: var(--prim-gray-600);
+  --c-divider: var(--prim-gray-700);
+
+  --c-text: var(--prim-gray-100);
+  --c-text-2: var(--prim-gray-400);
+  --c-text-3: var(--prim-gray-500);
+  --c-text-inv: var(--prim-gray-900);
+
+  --c-brand: var(--prim-purple-400);
+  --c-brand-hover: var(--prim-purple-300);
+  --c-brand-tint: var(--prim-purple-500-16);
+  --c-on-brand: var(--prim-gray-100);
+
+  --c-accent: var(--prim-lime-500);
+  --c-accent-strong: var(--prim-lime-400);
+  --c-on-accent: var(--prim-gray-900);
+
+  --c-focus-ring: var(--prim-purple-500-40);
+  --c-node-hover: var(--prim-gray-100-5);
+
+  --c-bpmn-event-start: var(--prim-green-500);
+  --c-bpmn-event-end: var(--prim-red-500);
+  --c-bpmn-task: var(--prim-blue-500);
+  --c-bpmn-gateway: var(--prim-amber-500);
+  --c-bpmn-node-fill: var(--prim-gray-700);
+  --c-bpmn-node-stroke: var(--prim-gray-450);
+  --c-bpmn-node-text: var(--prim-gray-100);
+
+  --c-lane-header: var(--prim-gray-700);
+  --c-lane-header-text: var(--prim-gray-300);
+  --c-lane-body: rgba(255, 255, 255, 0.02);
+  --c-lane-border: var(--prim-gray-600);
+
+  --c-edge: var(--prim-gray-450);
+  --c-edge-message: var(--prim-purple-300);
+  --c-edge-association: var(--prim-gray-500);
+
+  --sh-sm: 0 1px 2px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 0, 0, 0.4);
+  --sh-md: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Reset basics */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-13);
+  line-height: var(--lh-normal);
+  color: var(--c-text);
+  background: var(--c-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+button {
+  font: inherit;
+  color: inherit;
+}

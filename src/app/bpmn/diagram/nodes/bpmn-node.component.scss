@@ -1,0 +1,120 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.bpmn-node {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-bpmn-node-text);
+}
+
+/* ── Events: circular glyphs ─────────────────────────────── */
+.event {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--c-bpmn-node-fill);
+  box-sizing: border-box;
+}
+.event--start {
+  border: 2px solid var(--c-bpmn-event-start);
+}
+.event--end {
+  border: 3.5px solid var(--c-bpmn-event-end);
+}
+.event--intermediate {
+  border: 1.5px solid var(--c-bpmn-node-stroke);
+  box-shadow: inset 0 0 0 4px var(--c-bpmn-node-fill), inset 0 0 0 5.5px var(--c-bpmn-node-stroke);
+}
+
+/* ── Activities: rounded rectangle (BPMN task) ───────────── */
+.task {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--r-xs);
+  background: var(--c-bpmn-node-fill);
+  border: 1.5px solid var(--c-bpmn-node-stroke);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Reserve top-left room so the type icon never collides with the label. */
+  padding: 22px 12px 12px;
+}
+.task--typed {
+  border-left: 3px solid var(--c-bpmn-task);
+}
+.task__label {
+  font-size: var(--fs-12);
+  font-weight: var(--fw-medium);
+  text-align: center;
+  line-height: var(--lh-snug);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  cursor: text;
+}
+
+.task__input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: var(--c-field-bg);
+  color: var(--c-bpmn-node-text);
+  font: inherit;
+  font-size: var(--fs-12);
+  font-weight: var(--fw-medium);
+  text-align: center;
+  border-radius: var(--r-xs);
+  padding: 2px 4px;
+  box-shadow: 0 0 0 2px var(--c-focus-ring);
+}
+.task__icon {
+  position: absolute;
+  top: 7px;
+  left: 8px;
+  width: 15px;
+  height: 15px;
+  color: var(--c-bpmn-task);
+}
+
+/* ── Gateways: SVG diamond (square, sharp corners) ───────── */
+.gateway {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.gateway__shape {
+  fill: var(--c-bpmn-node-fill);
+  stroke: var(--c-bpmn-node-stroke);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+.gateway__mark {
+  position: relative;
+  width: 42%;
+  height: 42%;
+  color: var(--c-bpmn-gateway);
+}
+
+/* ── External label (below events & gateways) ────────────── */
+.external-label {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: var(--fs-11);
+  font-weight: var(--fw-medium);
+  color: var(--c-bpmn-node-text);
+  pointer-events: none;
+}

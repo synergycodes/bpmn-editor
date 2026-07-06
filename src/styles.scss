@@ -1,0 +1,16 @@
+/* Global styles — token layer first, then the ng-diagram engine stylesheet. */
+@import './tokens.css';
+@import 'ng-diagram/styles.css';
+
+/* The diagram host must have an explicit size to render. */
+ng-diagram {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Thin, themed scrollbars for chrome panels. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--c-border-strong) transparent;
+}

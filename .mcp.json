@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "ng-diagram": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@ng-diagram/mcp"],
+      "env": {}
+    }
+  }
+}

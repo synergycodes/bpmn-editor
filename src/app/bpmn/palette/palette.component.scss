@@ -1,0 +1,93 @@
+:host {
+  display: block;
+  width: var(--w-palette);
+  flex: 0 0 var(--w-palette);
+  height: 100%;
+  background: var(--c-surface);
+  border-right: 1px solid var(--c-divider);
+  overflow-y: auto;
+}
+
+.palette__head {
+  padding: var(--s-6) var(--s-8) var(--s-4);
+}
+.palette__title {
+  display: block;
+  font-size: var(--fs-14);
+  font-weight: var(--fw-semi);
+  color: var(--c-text);
+}
+.palette__hint {
+  font-size: var(--fs-11);
+  color: var(--c-text-3);
+}
+
+.palette__section {
+  padding: 0 var(--s-8) var(--s-6);
+}
+.palette__section-title {
+  margin: var(--s-4) 0 var(--s-3);
+  font-size: var(--fs-11);
+  font-weight: var(--fw-semi);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--c-text-3);
+}
+
+.palette__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-4);
+}
+
+ng-diagram-palette-item {
+  display: block;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-5) var(--s-3);
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  cursor: grab;
+  transition: border-color var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
+  user-select: none;
+}
+.tile:hover {
+  border-color: var(--c-brand);
+  box-shadow: 0 0 0 3px var(--c-brand-tint);
+  transform: translateY(-1px);
+}
+.tile:active {
+  cursor: grabbing;
+}
+.tile__art {
+  color: var(--c-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 26px;
+}
+.tile__label {
+  font-size: var(--fs-11);
+  font-weight: var(--fw-medium);
+  color: var(--c-text-2);
+  text-align: center;
+  line-height: var(--lh-tight);
+}
+
+.tile-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--c-brand);
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-brand);
+  border-radius: var(--r-md);
+}

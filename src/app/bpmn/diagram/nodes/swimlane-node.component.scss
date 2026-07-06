@@ -1,0 +1,81 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.lane {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  border: 1.5px solid var(--c-lane-border);
+  border-radius: var(--r-sm);
+  background: var(--c-lane-body);
+  overflow: hidden;
+}
+
+/* Drop-zone highlight when a node is dragged over the lane. */
+.lane.ng-diagram-group-highlight {
+  border-color: var(--c-brand);
+  box-shadow: inset 0 0 0 2px var(--c-brand-tint);
+}
+
+.lane__header {
+  flex: 0 0 auto;
+  position: relative;
+  background: var(--c-lane-header);
+  border-right: 1.5px solid var(--c-lane-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lane__title {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: var(--fs-12);
+  font-weight: var(--fw-semi);
+  letter-spacing: 0.02em;
+  color: var(--c-lane-header-text);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.lane__controls {
+  position: absolute;
+  top: var(--s-2);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lane__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--c-lane-header-text);
+  cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.lane__btn:hover {
+  background: var(--c-node-hover);
+  color: var(--c-brand);
+}
+.lane__btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.lane__body {
+  flex: 1 1 auto;
+  min-width: 0;
+}

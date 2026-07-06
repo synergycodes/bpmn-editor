@@ -1,0 +1,90 @@
+:host {
+  display: block;
+  flex: 0 0 var(--h-header);
+}
+
+.toolbar {
+  height: var(--h-header);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--s-8);
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-divider);
+}
+
+.toolbar__brand {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+}
+.toolbar__logo {
+  align-self: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, var(--c-brand), var(--c-accent));
+}
+.toolbar__name {
+  font-size: var(--fs-16);
+  font-weight: var(--fw-semi);
+  color: var(--c-text);
+}
+.toolbar__sub {
+  font-size: var(--fs-11);
+  color: var(--c-text-3);
+  letter-spacing: 0.04em;
+}
+
+.toolbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  height: var(--h-control);
+  padding: 0 var(--s-6);
+  border-radius: var(--r-sm);
+  border: 1px solid transparent;
+  font-size: var(--fs-13);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  transition: background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+}
+.btn svg {
+  width: 16px;
+  height: 16px;
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: var(--c-border);
+  color: var(--c-text-2);
+}
+.btn--ghost:hover:not(:disabled) {
+  border-color: var(--c-border-strong);
+  color: var(--c-text);
+  background: var(--c-node-hover);
+}
+
+.btn--primary {
+  background: var(--c-brand);
+  color: var(--c-on-brand);
+}
+.btn--primary:hover:not(:disabled) {
+  background: var(--c-brand-hover);
+}
+
+.btn--icon {
+  padding: 0;
+  width: var(--h-control);
+  justify-content: center;
+}

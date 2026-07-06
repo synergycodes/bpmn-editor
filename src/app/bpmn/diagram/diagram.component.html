@@ -1,0 +1,32 @@
+<!-- BPMN arrowhead / marker defs (inherit edge color via context-stroke). -->
+<ng-diagram-marker>
+  <svg>
+    <defs>
+      <marker id="bpmn-seq-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9"
+        markerHeight="9" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="context-stroke" />
+      </marker>
+      <marker id="bpmn-msg-end" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="11"
+        markerHeight="11" orient="auto-start-reverse">
+        <path d="M1,1 L11,6 L1,11" fill="none" stroke="context-stroke" stroke-width="1.4" />
+      </marker>
+      <marker id="bpmn-msg-start" viewBox="0 0 12 12" refX="6" refY="6" markerWidth="10"
+        markerHeight="10">
+        <circle cx="6" cy="6" r="4" fill="none" stroke="context-stroke" stroke-width="1.4" />
+      </marker>
+    </defs>
+  </svg>
+</ng-diagram-marker>
+
+<ng-diagram
+  [model]="model$"
+  [config]="config"
+  [nodeTemplateMap]="nodeTemplateMap"
+  [edgeTemplateMap]="edgeTemplateMap"
+  (paletteItemDropped)="onPaletteItemDropped($event)"
+  (nodeResizeEnded)="onNodeResizeEnded($event)"
+  (nodeDragEnded)="onNodeDragEnded($event)"
+  (groupMembershipChanged)="onGroupMembershipChanged($event)"
+>
+  <ng-diagram-background type="dots" />
+</ng-diagram>
