@@ -36,10 +36,14 @@ export class SwimlaneService {
   private readonly ngDiagram = inject(NgDiagramService);
   private readonly elk = inject(ElkLayoutService);
 
-  /** Swimlanes sorted by their stacking order (top → bottom). */
+  /**
+   * Swimlanes sorted by their stacking order (top → bottom). Read from the
+   * committed model, since the nodes() signal refreshes asynchronously.
+   */
   lanes(): SwimlaneNode[] {
     return this.model
-      .nodes()
+      .getModel()
+      .getNodes()
       .filter(isSwimlane)
       .sort((a, b) => (a.data?.order ?? 0) - (b.data?.order ?? 0));
   }
@@ -189,9 +193,6 @@ export class SwimlaneService {
    * A lane was resized by hand: match every other lane to its (possibly new)
    * width so all lanes stay equal, then re-stack so a taller/shorter lane
    * pushes the lanes below it — no overlaps, no gaps.
-   *
-   * `lane` comes from the NodeResizeEndedEvent payload, which the docs guarantee
-   * carries the final size — no model read-back needed.
    */
   onLaneResized(lane: Node): void {
     if (!isSwimlane(lane)) return;
@@ -258,8 +259,7 @@ export class SwimlaneService {
 
   /**
    * A freshly-dropped lane joins the bottom of the stack, adopts the shared
-   * lane width, and triggers a re-stack. Call after the model has committed
-   * the new node (defer one tick from the drop handler).
+   * lane width, and triggers a re-stack.
    */
   onLaneAdded(laneId: string): void {
     const all = this.lanes();

@@ -245,19 +245,17 @@ grouping: {
 
 The lane's own template is a group template (`NgDiagramGroupNodeTemplate`): a rotated header band with reorder buttons, a resize adornment, and the engine's drop-zone state exposed as a plain CSS class – `ngDiagramGroupHighlighted` puts `.ng-diagram-group-highlight` on the lane while a node hovers over it, and you style it with your own CSS. The buttons sit behind `data-no-drag`, so pressing them never starts a lane drag. Full template in the repo.
 
-Parenting a dropped element into a lane is a geometric decision: hit-test the drop *point* against the lane rectangles, then call the groups service (`NgDiagramGroupsService`). One honest workaround remains – the docs make no commit-timing guarantee for `paletteItemDropped`, so the handler defers 1 tick before touching the model:
+Parenting a dropped element into a lane is a geometric decision: hit-test the drop *point* against the lane rectangles, then call the groups service (`NgDiagramGroupsService`). The `paletteItemDropped` event fires after the drop has been committed to the model, so the handler reads the new node back and re-parents it right away:
 
 ```ts
 onPaletteItemDropped(event: PaletteItemDroppedEvent): void {
   const node = event.node;
   if (isSwimlane(node)) {
-    setTimeout(() => this.swimlanes.onLaneAdded(node.id), 0);
+    this.swimlanes.onLaneAdded(node.id); // stack + width-match the new lane
     return;
   }
-  setTimeout(() => {
-    const lane = this.swimlanes.laneAtPoint(event.dropPosition);
-    if (lane) this.groups.addToGroup(lane.id, [node.id]);
-  }, 0);
+  const lane = this.swimlanes.laneAtPoint(event.dropPosition);
+  if (lane) this.groups.addToGroup(lane.id, [node.id]);
 }
 ```
 
@@ -268,7 +266,7 @@ The lane geometry itself – stacking lanes flush top-to-bottom, keeping all lan
 - **Lanes never move by hand** (`draggable: false`). Reordering happens through the header buttons – killing a whole class of overlap bugs.
 - **Lanes resize manually only.** Dragging a child never changes a lane's size; the engine's resize floor (Step 7) guarantees a lane can never be *shrunk* below its content.
 
-Making that second "never" hold takes 1 CSS rule, not an event handler: ngDiagram's built-in group behavior grows a group to keep a dragged child inside its rendered bounds, and it advertises those bounds as an inline `min-width`/`min-height` on the group's host element. Zeroing that min for lanes (`ng-diagram-node:has(.lane) { min-width: 0 !important; min-height: 0 !important; }`) makes the lane follow its explicit model size – and because the auto-grow is driven off the rendered bound, the model size stays put too. "Nodes are DOM elements" paying off once more – the override lives in the repo's `styles.scss`.
+Making that second "never" hold takes 1 CSS rule, not an event handler: ngDiagram mirrors the configured minimum size (`resize.getMinNodeSize`, Step 7) onto every node host as an inline `min-width`/`min-height`. For lanes that minimum is content-driven, so a child dragged toward a lane's edge would visually inflate the lane beyond its model size. Zeroing the min for lanes (`ng-diagram-node:has(.lane) { min-width: 0 !important; min-height: 0 !important; }`) keeps the rendered lane exactly at its explicit model size, while the same minimum still floors interactive resize. "Nodes are DOM elements" paying off once more – the override lives in the repo's `styles.scss`.
 
 **Checkpoint:** drop a task inside a lane – the lane highlights on hover, and the node becomes its child.
 

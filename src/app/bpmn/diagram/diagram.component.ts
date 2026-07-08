@@ -43,29 +43,21 @@ export class DiagramComponent {
     [BPMN_EDGE_TYPE, BpmnEdgeComponent],
   ]);
 
+  // Fires after the dropped node is committed to the model, so it can be
+  // read back and re-parented right away.
   onPaletteItemDropped(event: PaletteItemDroppedEvent): void {
     const node = event.node;
     if (isSwimlane(node)) {
-      // Docs make no commit-timing guarantee for paletteItemDropped and offer no
-      // post-drop hook, so defer one tick before reading the new lane back from
-      // the model (onLaneAdded both reads and writes it).
-      setTimeout(() => this.swimlanes.onLaneAdded(node.id), 0);
+      this.swimlanes.onLaneAdded(node.id);
       return;
     }
-    // Parent the element into whichever lane its drop point landed in, via a
-    // deterministic geometric hit-test. Deferred one tick because the docs make
-    // no commit-timing guarantee for paletteItemDropped, and addToGroup targets
-    // the new node's id. Lanes do not auto-resize (manual resize only — F10).
-    setTimeout(() => {
-      const lane = this.swimlanes.laneAtPoint(event.dropPosition);
-      if (lane) this.groups.addToGroup(lane.id, [node.id]);
-    }, 0);
+    // Parent the element into the lane its drop point landed in, if any.
+    const lane = this.swimlanes.laneAtPoint(event.dropPosition);
+    if (lane) this.groups.addToGroup(lane.id, [node.id]);
   }
 
   onNodeResizeEnded(event: NodeResizeEndedEvent): void {
     if (isSwimlane(event.node)) {
-      // Docs guarantee event.node carries the final size when this fires —
-      // no deferral or model read-back needed.
       this.swimlanes.onLaneResized(event.node);
     }
   }
