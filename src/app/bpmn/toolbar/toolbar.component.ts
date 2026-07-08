@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { NgDiagramViewportService } from 'ng-diagram';
+import { NgDiagramService, NgDiagramViewportService } from 'ng-diagram';
 import { ThemeService } from '../../core/theme.service';
 import { SwimlaneService } from '../diagram/swimlane.service';
 
@@ -13,8 +13,10 @@ import { SwimlaneService } from '../diagram/swimlane.service';
 export class ToolbarComponent {
   private readonly swimlanes = inject(SwimlaneService);
   private readonly viewport = inject(NgDiagramViewportService);
+  private readonly diagram = inject(NgDiagramService);
   protected readonly theme = inject(ThemeService);
 
+  protected readonly ready = this.diagram.isInitialized;
   protected readonly laying = signal(false);
 
   async runLayout(): Promise<void> {

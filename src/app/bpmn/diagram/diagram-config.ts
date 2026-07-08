@@ -1,4 +1,4 @@
-import type { Edge, NgDiagramConfig, Node, Size } from 'ng-diagram';
+import type { Edge, NgDiagramConfig, Node, Port, Size } from 'ng-diagram';
 import { BPMN_EDGE_TYPE, BpmnEdgeKind, BpmnNodeType, isSwimlane } from '../model/bpmn.model';
 
 /**
@@ -27,7 +27,7 @@ export function buildDiagramConfig(laneMinSize: (lane: Node) => Size): NgDiagram
     },
     linking: {
       // Do not allow a swimlane itself to be a connection endpoint.
-      validateConnection: (source: Node, _sp: unknown, target: Node) =>
+      validateConnection: (source: Node | null, _sourcePort: Port | null, target: Node | null) =>
         !!source && !!target && !isSwimlane(source) && !isSwimlane(target),
       // Materialise drawn links as BPMN sequence flows.
       finalEdgeDataBuilder: (edge: Edge) =>

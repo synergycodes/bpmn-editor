@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import {
   NgDiagramModelService,
   NgDiagramNodeService,
+  NgDiagramService,
   NgDiagramViewportService,
   type Node,
   type Size,
@@ -22,14 +23,17 @@ import { ElkLayoutService } from './layout/elk-layout.service';
 
 /**
  * Owns everything about swimlanes: ordering, the vertical stacked arrangement,
- * equal-width alignment, resize-to-fit after a child layout, and the elkjs
- * layered layout of the elements inside each lane.
+ * equal-width alignment, manual lane resize handling, and the elkjs layered
+ * layout of the elements inside each lane. Lanes never auto-resize to their
+ * children — lane geometry changes only via the lane's own resize handles, the
+ * Layout button, and lane add/reorder stacking.
  */
 @Injectable()
 export class SwimlaneService {
   private readonly model = inject(NgDiagramModelService);
   private readonly nodes = inject(NgDiagramNodeService);
   private readonly viewport = inject(NgDiagramViewportService);
+  private readonly ngDiagram = inject(NgDiagramService);
   private readonly elk = inject(ElkLayoutService);
 
   /** Swimlanes sorted by their stacking order (top → bottom). */
@@ -38,15 +42,6 @@ export class SwimlaneService {
       .nodes()
       .filter(isSwimlane)
       .sort((a, b) => (a.data?.order ?? 0) - (b.data?.order ?? 0));
-  }
-
-  /**
-   * Set a lane's order. `updateNodeData` REPLACES the data object, so we must
-   * spread the existing data to preserve the lane title.
-   */
-  private setOrder(lane: SwimlaneNode, order: number): void {
-    if ((lane.data?.order ?? -1) === order) return;
-    this.model.updateNodeData(lane.id, { ...(lane.data ?? { label: 'Lane' }), order });
   }
 
   /* ── Full layout (Layout button) ──────────────────────────── */
@@ -115,7 +110,11 @@ export class SwimlaneService {
       cursorY += laneHeight;
     });
 
-    this.model.updateNodes(nodeUpdates);
+    // Commit the layout atomically and wait for re-measurement so zoomToFit
+    // sees the new bounds, not the pre-layout ones.
+    await this.ngDiagram.transaction(() => {
+      this.model.updateNodes(nodeUpdates);
+    }, { waitForMeasurements: true });
     this.viewport.zoomToFit({ padding: 60 });
   }
 
@@ -139,7 +138,11 @@ export class SwimlaneService {
   /**
    * Re-stack the given lanes (defaults to current order) vertically, keeping
    * each lane's size. Children move with their lane by the same positional
-   * delta, and each lane's `order` is normalised to its new index. No elk.
+   * delta, and each lane's `order` is normalised to its new index — position
+   * and order are written together in the one batch. No elk.
+   *
+   * `updateNodeData` REPLACES the data object, so the `order` update spreads
+   * the existing data to preserve the lane title.
    */
   arrangeLanes(ordered?: SwimlaneNode[]): void {
     const lanes = ordered ?? this.lanes();
@@ -153,16 +156,24 @@ export class SwimlaneService {
       const targetY = cursorY;
       const dx = targetX - (lane.position?.x ?? targetX);
       const dy = targetY - (lane.position?.y ?? targetY);
+      const moved = dx !== 0 || dy !== 0;
+      const orderChanged = (lane.data?.order ?? -1) !== index;
 
-      if (dx !== 0 || dy !== 0) {
-        updates.push({ id: lane.id, position: { x: targetX, y: targetY } });
+      if (moved || orderChanged) {
+        updates.push({
+          id: lane.id,
+          ...(moved ? { position: { x: targetX, y: targetY } } : {}),
+          ...(orderChanged
+            ? { data: { ...(lane.data ?? { label: 'Lane' }), order: index } }
+            : {}),
+        } as Pick<Node, 'id'> & Partial<Node>);
+      }
+      if (moved) {
         for (const child of this.model.getChildren(lane.id)) {
           const p = child.position ?? { x: 0, y: 0 };
           updates.push({ id: child.id, position: { x: p.x + dx, y: p.y + dy } });
         }
       }
-
-      this.setOrder(lane, index);
 
       cursorY += lane.size?.height ?? LANE_MIN_CONTENT.height;
     });
@@ -172,82 +183,20 @@ export class SwimlaneService {
     }
   }
 
-  /**
-   * Size every lane to the bounds of its children and re-stack the lanes so
-   * none overlap. Called after a node is dragged/dropped into (or out of) a
-   * lane. NOT a layout — the children's relative arrangement is untouched; the
-   * lane just wraps them (each lane's content block is pinned to the lane top
-   * so there's no gap/overflow) and the lanes below shift to stay flush.
-   */
-  refitLanes(): void {
-    const lanes = this.lanes();
-    if (lanes.length === 0) return;
-
-    // Uniform width: fit the widest content, but never narrower than the
-    // current widest lane (so a manual widen sticks).
-    const laneWidth = Math.max(
-      this.laneMinSize(lanes[0]).width,
-      ...lanes.map((l) => l.size?.width ?? 0),
-    );
-
-    const updates: (Pick<Node, 'id'> & Partial<Node>)[] = [];
-    let cursorY = LANE_ORIGIN.y;
-
-    lanes.forEach((lane, index) => {
-      const laneX = LANE_ORIGIN.x;
-      const laneY = cursorY;
-      const children = this.model.getChildren(lane.id).filter(isBpmnElement);
-
-      let laneHeight: number;
-      let shiftX = 0;
-      let shiftY = 0;
-
-      if (children.length) {
-        const minTop = Math.min(...children.map((c) => c.position?.y ?? 0));
-        const maxBottom = Math.max(...children.map((c) => (c.position?.y ?? 0) + (c.size?.height ?? 0)));
-        const contentHeight = Math.max(LANE_MIN_CONTENT.height, maxBottom - minTop);
-        laneHeight = LANE_PADDING.top + contentHeight + LANE_PADDING.bottom;
-        // Pin the content block: topmost child → lane content top. This single
-        // delta also absorbs the re-stack move, so children keep their relative
-        // positions and always sit inside the lane.
-        shiftY = laneY + LANE_PADDING.top - minTop;
-        shiftX = laneX - (lane.position?.x ?? laneX);
-      } else {
-        laneHeight = LANE_PADDING.top + LANE_MIN_CONTENT.height + LANE_PADDING.bottom;
-      }
-
-      updates.push({
-        id: lane.id,
-        position: { x: laneX, y: laneY },
-        size: { width: laneWidth, height: laneHeight },
-        data: { ...(lane.data ?? { label: 'Lane' }), order: index },
-      } as Pick<Node, 'id'> & Partial<Node>);
-
-      if (shiftX !== 0 || shiftY !== 0) {
-        for (const c of children) {
-          const p = c.position ?? { x: 0, y: 0 };
-          updates.push({ id: c.id, position: { x: p.x + shiftX, y: p.y + shiftY } });
-        }
-      }
-
-      cursorY += laneHeight;
-    });
-
-    this.model.updateNodes(updates);
-  }
-
   /* ── Manual lane resize ───────────────────────────────────── */
 
   /**
    * A lane was resized by hand: match every other lane to its (possibly new)
    * width so all lanes stay equal, then re-stack so a taller/shorter lane
    * pushes the lanes below it — no overlaps, no gaps.
+   *
+   * `lane` comes from the NodeResizeEndedEvent payload, which the docs guarantee
+   * carries the final size — no model read-back needed.
    */
-  onLaneResized(laneId: string): void {
-    const lane = this.model.getNodeById(laneId);
+  onLaneResized(lane: Node): void {
     if (!isSwimlane(lane)) return;
     const width = lane.size?.width;
-    if (width) this.syncLaneWidths(width, laneId);
+    if (width) this.syncLaneWidths(width, lane.id);
     this.arrangeLanes();
   }
 

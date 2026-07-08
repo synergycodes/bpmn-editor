@@ -73,7 +73,7 @@ export function seedModel(): { nodes: Node[]; edges: Edge[] } {
     el('t-process', BpmnNodeType.ServiceTask, 'lane-system', 'Process', 'task', 500, sy),
   ];
 
-  const seq = (id: string, source: string, target: string): Edge =>
+  const seq = (id: string, source: string, target: string, label?: string): Edge =>
     ({
       id,
       source,
@@ -82,13 +82,13 @@ export function seedModel(): { nodes: Node[]; edges: Edge[] } {
       targetPort: 'left',
       type: BPMN_EDGE_TYPE,
       routing: 'orthogonal',
-      data: { kind: BpmnEdgeKind.Sequence },
+      data: { kind: BpmnEdgeKind.Sequence, label },
     }) as Edge;
 
   const edges: Edge[] = [
     seq('e1', 'start', 't-request'),
     seq('e2', 't-request', 'gw'),
-    seq('e3', 'gw', 't-revise'),
+    seq('e3', 'gw', 't-revise', 'No'),
     seq('e4', 't-revise', 'end'),
     seq('e5', 't-validate', 't-process'),
     // Cross-lane message flow — excluded from layout.

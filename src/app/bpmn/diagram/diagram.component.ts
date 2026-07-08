@@ -7,8 +7,6 @@ import {
   NgDiagramMarkerComponent,
   NgDiagramEdgeTemplateMap,
   NgDiagramNodeTemplateMap,
-  type GroupMembershipChangedEvent,
-  type NodeDragEndedEvent,
   type NodeResizeEndedEvent,
   type PaletteItemDroppedEvent,
 } from 'ng-diagram';
@@ -48,41 +46,27 @@ export class DiagramComponent {
   onPaletteItemDropped(event: PaletteItemDroppedEvent): void {
     const node = event.node;
     if (isSwimlane(node)) {
-      // Defer one tick so the new lane node is committed to the model before
-      // the service reads it back for re-stacking.
+      // Docs make no commit-timing guarantee for paletteItemDropped and offer no
+      // post-drop hook, so defer one tick before reading the new lane back from
+      // the model (onLaneAdded both reads and writes it).
       setTimeout(() => this.swimlanes.onLaneAdded(node.id), 0);
       return;
     }
-    // Parent the element into whichever lane its drop point landed in. Done via
-    // a deterministic geometric hit-test (not overlap of yet-unmeasured bounds),
-    // deferred a tick so the new node is in the model.
+    // Parent the element into whichever lane its drop point landed in, via a
+    // deterministic geometric hit-test. Deferred one tick because the docs make
+    // no commit-timing guarantee for paletteItemDropped, and addToGroup targets
+    // the new node's id. Lanes do not auto-resize (manual resize only — F10).
     setTimeout(() => {
       const lane = this.swimlanes.laneAtPoint(event.dropPosition);
       if (lane) this.groups.addToGroup(lane.id, [node.id]);
-      // Grow the target lane to contain the new node and re-stack below it.
-      this.swimlanes.refitLanes();
     }, 0);
-  }
-
-  onNodeDragEnded(_event: NodeDragEndedEvent): void {
-    // A node may have moved into another lane (or lower within its lane),
-    // heightening it — re-fit lanes so none overlaps. Deferred so the final
-    // positions / group membership are committed to the model first.
-    setTimeout(() => this.swimlanes.refitLanes(), 0);
-  }
-
-  onGroupMembershipChanged(_event: GroupMembershipChangedEvent): void {
-    // A node changed lanes — size the affected lanes to their new children
-    // bounds and re-stack so none overlap.
-    setTimeout(() => this.swimlanes.refitLanes(), 0);
   }
 
   onNodeResizeEnded(event: NodeResizeEndedEvent): void {
     if (isSwimlane(event.node)) {
-      // Defer one tick so the committed final size is in the model, then
-      // equalise widths and re-stack the lanes below.
-      const id = event.node.id;
-      setTimeout(() => this.swimlanes.onLaneResized(id), 0);
+      // Docs guarantee event.node carries the final size when this fires —
+      // no deferral or model read-back needed.
+      this.swimlanes.onLaneResized(event.node);
     }
   }
 }

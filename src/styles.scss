@@ -9,6 +9,18 @@ ng-diagram {
   display: block;
 }
 
+/* Lanes size strictly to their model dimensions. ng-diagram puts an inline
+   min-width/min-height on a group host to fit its children and grows it while a
+   child is dragged — which would balloon the lane around a dragged/overflowing
+   node. Lanes resize only via their handles / Layout (F10), so neutralise that
+   min: the host then follows its explicit inline size, and because the engine's
+   group auto-grow is driven off that rendered bound, the model size stays put
+   too — no extra middleware needed. */
+ng-diagram-node:has(.lane) {
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+
 /* Thin, themed scrollbars for chrome panels. */
 * {
   scrollbar-width: thin;

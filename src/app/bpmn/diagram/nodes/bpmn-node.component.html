@@ -35,9 +35,9 @@
           #editor
           class="task__input"
           type="text"
+          data-no-drag="true"
+          data-no-pan="true"
           [value]="label()"
-          (pointerdown)="$event.stopPropagation()"
-          (mousedown)="$event.stopPropagation()"
           (dblclick)="$event.stopPropagation()"
           (keydown.enter)="commit(editor.value)"
           (keydown.escape)="cancel()"

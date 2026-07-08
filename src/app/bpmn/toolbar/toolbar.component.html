@@ -6,7 +6,7 @@
   </div>
 
   <div class="toolbar__actions">
-    <button type="button" class="btn btn--ghost" (click)="fit()" title="Zoom to fit">
+    <button type="button" class="btn btn--ghost" (click)="fit()" [disabled]="!ready()" title="Zoom to fit">
       <svg viewBox="0 0 20 20" aria-hidden="true">
         <path d="M4 8V4h4M16 8V4h-4M4 12v4h4M16 12v4h-4" fill="none" stroke="currentColor"
           stroke-width="1.6" stroke-linecap="round" />
@@ -14,8 +14,8 @@
       Fit
     </button>
 
-    <button type="button" class="btn btn--primary" (click)="runLayout()" [disabled]="laying()"
-      title="Auto-arrange lanes and their contents">
+    <button type="button" class="btn btn--primary" (click)="runLayout()"
+      [disabled]="!ready() || laying()" title="Auto-arrange lanes and their contents">
       <svg viewBox="0 0 20 20" aria-hidden="true">
         <path d="M3 4h6v5H3zM3 12h6v4H3zM12 4h5v4h-5zM12 11h5v5h-5z" fill="none"
           stroke="currentColor" stroke-width="1.6" />

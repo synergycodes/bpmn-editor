@@ -1,7 +1,7 @@
 <ng-diagram-node-resize-adornment>
   <div class="lane" ngDiagramNodeSelected ngDiagramGroupHighlighted [node]="node()">
     <div class="lane__header" [style.width.px]="headerWidth">
-      <div class="lane__controls" (pointerdown)="stop($event)">
+      <div class="lane__controls" data-no-drag="true" data-no-pan="true">
         <button type="button" class="lane__btn" title="Move lane up" (click)="moveUp($event)">
           <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 4l4 5H4z" fill="currentColor" /></svg>
         </button>

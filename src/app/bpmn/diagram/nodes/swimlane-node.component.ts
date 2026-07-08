@@ -45,8 +45,4 @@ export class SwimlaneNodeComponent implements NgDiagramGroupNodeTemplate<Swimlan
     event.stopPropagation();
     this.swimlanes.moveLane(this.node().id, +1);
   }
-
-  stop(event: Event): void {
-    event.stopPropagation();
-  }
 }
