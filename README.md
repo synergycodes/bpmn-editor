@@ -2,6 +2,8 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/licenses/MIT)
 
+**[Live Demo](https://synergycodes.github.io/bpmn-editor/)**
+
 Interactive BPMN process editor built with Angular 19 and [ng-diagram](https://www.npmjs.com/package/ng-diagram). Use this project as a starting point for building your own process editor. Minimal dependencies: only Angular, ng-diagram, and ELK.js, with no opinionated third-party UI libraries.
 
 Features:
