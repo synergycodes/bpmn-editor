@@ -9,8 +9,7 @@ ng-diagram {
   display: block;
 }
 
-/* Engine bridge — point ngDiagram's themable tokens at the brand. Placed
-   after the engine import so it wins the cascade over its :root defaults. */
+/* Engine bridge — point ngDiagram's themable tokens at the brand. */
 :root {
   --ngd-resize-line-border-color: var(--c-brand);
   --ngd-resize-handle-background-color: var(--c-surface-2);

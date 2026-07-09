@@ -26,10 +26,10 @@ export function buildDiagramConfig(laneMinSize: (lane: Node) => Size): NgDiagram
       canGroup: (node: Node, group: Node) => isSwimlane(group) && !isSwimlane(node),
     },
     linking: {
-      // Do not allow a swimlane itself to be a connection endpoint.
+      // Swimlanes cannot be connection endpoints.
       validateConnection: (source: Node | null, _sourcePort: Port | null, target: Node | null) =>
         !!source && !!target && !isSwimlane(source) && !isSwimlane(target),
-      // Materialise drawn links as BPMN sequence flows.
+      // Every user-drawn connection becomes a typed sequence flow.
       finalEdgeDataBuilder: (edge: Edge) =>
         ({
           ...edge,

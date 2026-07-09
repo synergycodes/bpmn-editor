@@ -4,9 +4,7 @@
   height: 100%;
 }
 
-/* Lanes anchor to the top-left of the stack, so only the right and bottom
-   edges (and their corner) can resize. The top and left lines stay visible
-   as part of the selection frame, but are inert. Remove once the adornment
+/* Only the right and bottom edges resize a lane. Remove once the adornment
    API supports configurable resize edges. */
 :host ::ng-deep {
   .resize-line--top,
