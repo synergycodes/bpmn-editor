@@ -11,11 +11,15 @@
         @for (entry of entriesFor(section); track entry.label) {
           <ng-diagram-palette-item [item]="entry.item">
             <div class="tile" [title]="entry.label">
-              <div class="tile__art" [innerHTML]="entry.svg"></div>
+              <div class="tile__art">
+                <app-icon [name]="entry.glyph" />
+              </div>
               <div class="tile__label">{{ entry.label }}</div>
             </div>
             <ng-diagram-palette-item-preview>
-              <div class="tile-preview" [innerHTML]="entry.svg"></div>
+              <div class="tile-preview">
+                <app-icon [name]="entry.glyph" />
+              </div>
             </ng-diagram-palette-item-preview>
           </ng-diagram-palette-item>
         }

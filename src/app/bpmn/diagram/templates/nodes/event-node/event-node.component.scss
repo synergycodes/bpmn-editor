@@ -1,0 +1,34 @@
+@use '../node-shared' as *;
+
+@include node-host;
+
+.event-node {
+  @include node-wrapper;
+}
+
+.event {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--c-bpmn-node-fill);
+  box-sizing: border-box;
+}
+.event--start {
+  border: 2px solid var(--c-bpmn-event-start);
+}
+.event--end {
+  border: 3.5px solid var(--c-bpmn-event-end);
+}
+.event--intermediate {
+  border: 1.5px solid var(--c-bpmn-node-stroke);
+  box-shadow: inset 0 0 0 4px var(--c-bpmn-node-fill), inset 0 0 0 5.5px var(--c-bpmn-node-stroke);
+}
+
+.external-label {
+  @include external-label;
+}
+
+.event__input {
+  @include external-label-editor;
+}

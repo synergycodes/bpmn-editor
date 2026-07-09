@@ -2,39 +2,27 @@
   <div class="toolbar__brand">
     <span class="toolbar__logo" aria-hidden="true"></span>
     <span class="toolbar__name">BPMN Editor</span>
-    <span class="toolbar__sub">ngDiagram</span>
+    <a class="toolbar__sub" href="https://www.ngdiagram.dev/" target="_blank" rel="noopener">ngDiagram</a>
   </div>
 
   <div class="toolbar__actions">
     <button type="button" class="btn btn--ghost" (click)="fit()" [disabled]="!ready()" title="Zoom to fit">
-      <svg viewBox="0 0 20 20" aria-hidden="true">
-        <path d="M4 8V4h4M16 8V4h-4M4 12v4h4M16 12v4h-4" fill="none" stroke="currentColor"
-          stroke-width="1.6" stroke-linecap="round" />
-      </svg>
+      <app-icon name="fit" />
       Fit
     </button>
 
     <button type="button" class="btn btn--primary" (click)="runLayout()"
       [disabled]="!ready() || laying()" title="Auto-arrange lanes and their contents">
-      <svg viewBox="0 0 20 20" aria-hidden="true">
-        <path d="M3 4h6v5H3zM3 12h6v4H3zM12 4h5v4h-5zM12 11h5v5h-5z" fill="none"
-          stroke="currentColor" stroke-width="1.6" />
-      </svg>
+      <app-icon name="layout" />
       {{ laying() ? 'Laying out…' : 'Layout' }}
     </button>
 
     <button type="button" class="btn btn--ghost btn--icon" (click)="toggleTheme()"
       [title]="theme.theme() === 'dark' ? 'Switch to light' : 'Switch to dark'">
       @if (theme.theme() === 'dark') {
-        <svg viewBox="0 0 20 20" aria-hidden="true">
-          <circle cx="10" cy="10" r="4" fill="currentColor" />
-          <path d="M10 1v2M10 17v2M1 10h2M17 10h2M3.5 3.5l1.4 1.4M15.1 15.1l1.4 1.4M16.5 3.5l-1.4 1.4M4.9 15.1l-1.4 1.4"
-            stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-        </svg>
+        <app-icon name="sun" />
       } @else {
-        <svg viewBox="0 0 20 20" aria-hidden="true">
-          <path d="M16 11.5A6.5 6.5 0 0 1 8.5 4a6.5 6.5 0 1 0 7.5 7.5z" fill="currentColor" />
-        </svg>
+        <app-icon name="moon" />
       }
     </button>
   </div>

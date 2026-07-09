@@ -45,7 +45,7 @@ export class ThemeService {
     } catch {
       /* ignore */
     }
-    // Synergy Codes is dark-first.
+
     return 'dark';
   }
 }

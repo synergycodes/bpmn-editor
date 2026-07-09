@@ -1,0 +1,50 @@
+@use '../node-shared' as *;
+
+@include node-host;
+
+.task-node {
+  @include node-wrapper;
+}
+
+.task {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--r-xs);
+  background: var(--c-bpmn-node-fill);
+  border: 1.5px solid var(--c-bpmn-node-stroke);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+.task--typed {
+  border-left: 3px solid var(--c-bpmn-task);
+}
+.task__label {
+  font-size: var(--fs-12);
+  font-weight: var(--fw-medium);
+  text-align: center;
+  line-height: var(--lh-snug);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  cursor: text;
+}
+
+/* Skin comes from .inline-editor. */
+.task__input {
+  width: 100%;
+  font-size: var(--fs-12);
+  font-weight: var(--fw-medium);
+  padding: 2px 4px;
+}
+.task__icon {
+  position: absolute;
+  top: 7px;
+  left: 8px;
+  width: 15px;
+  height: 15px;
+  color: var(--c-bpmn-task);
+}

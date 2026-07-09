@@ -19,6 +19,22 @@ export const BpmnNodeType = {
 
 export type BpmnNodeType = (typeof BpmnNodeType)[keyof typeof BpmnNodeType];
 
+/* The BPMN shape families: events, tasks (activities), and gateways. */
+export const EVENT_TYPES: readonly BpmnNodeType[] = [
+  BpmnNodeType.StartEvent,
+  BpmnNodeType.EndEvent,
+  BpmnNodeType.IntermediateEvent,
+];
+export const TASK_TYPES: readonly BpmnNodeType[] = [
+  BpmnNodeType.Task,
+  BpmnNodeType.UserTask,
+  BpmnNodeType.ServiceTask,
+];
+export const GATEWAY_TYPES: readonly BpmnNodeType[] = [
+  BpmnNodeType.ExclusiveGateway,
+  BpmnNodeType.ParallelGateway,
+];
+
 export const BPMN_EDGE_TYPE = 'bpmn-edge';
 
 /** BPMN connection kinds. Only `sequence` participates in auto-layout. */
@@ -36,8 +52,6 @@ export type BpmnEdgeKind = (typeof BpmnEdgeKind)[keyof typeof BpmnEdgeKind];
 
 export interface BpmnNodeData {
   label: string;
-  /** Broad shape family — drives which template rendering branch is used. */
-  kind: 'event' | 'task' | 'gateway';
   [key: string]: unknown;
 }
 

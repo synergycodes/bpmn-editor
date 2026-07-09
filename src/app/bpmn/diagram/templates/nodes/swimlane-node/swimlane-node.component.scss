@@ -4,6 +4,23 @@
   height: 100%;
 }
 
+/* Lanes anchor to the top-left of the stack, so only the right and bottom
+   edges (and their corner) can resize. The top and left lines stay visible
+   as part of the selection frame, but are inert. Remove once the adornment
+   API supports configurable resize edges. */
+:host ::ng-deep {
+  .resize-line--top,
+  .resize-line--left {
+    pointer-events: none;
+  }
+
+  .resize-handle--top-left,
+  .resize-handle--top-right,
+  .resize-handle--bottom-left {
+    display: none;
+  }
+}
+
 .lane {
   position: relative;
   width: 100%;
@@ -40,6 +57,22 @@
   color: var(--c-lane-header-text);
   white-space: nowrap;
   user-select: none;
+  cursor: text;
+}
+
+/* Edit field in the title's place, rotated like the title so it stays
+   inside the header band. Skin comes from .inline-editor. */
+.lane__input {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  width: 24px;
+  height: 140px;
+  max-height: calc(100% - 56px);
+  color: var(--c-lane-header-text);
+  font-size: var(--fs-12);
+  font-weight: var(--fw-semi);
+  letter-spacing: 0.02em;
+  padding: 6px 2px;
 }
 
 .lane__controls {
@@ -70,7 +103,7 @@
   background: var(--c-node-hover);
   color: var(--c-brand);
 }
-.lane__btn svg {
+.lane__btn app-icon {
   width: 14px;
   height: 14px;
 }

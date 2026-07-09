@@ -1,5 +1,5 @@
 import type { Edge, NgDiagramConfig, Node, Port, Size } from 'ng-diagram';
-import { BPMN_EDGE_TYPE, BpmnEdgeKind, BpmnNodeType, isSwimlane } from '../model/bpmn.model';
+import { BPMN_EDGE_TYPE, BpmnEdgeKind, isSwimlane } from '../model/bpmn.model';
 
 /**
  * Diagram engine configuration. Governs grouping rules (only flow elements may
@@ -40,15 +40,3 @@ export function buildDiagramConfig(laneMinSize: (lane: Node) => Size): NgDiagram
     },
   } satisfies NgDiagramConfig;
 }
-
-/** Node type strings rendered by the shared BPMN element template. */
-export const BPMN_ELEMENT_TYPES: string[] = [
-  BpmnNodeType.StartEvent,
-  BpmnNodeType.EndEvent,
-  BpmnNodeType.IntermediateEvent,
-  BpmnNodeType.Task,
-  BpmnNodeType.UserTask,
-  BpmnNodeType.ServiceTask,
-  BpmnNodeType.ExclusiveGateway,
-  BpmnNodeType.ParallelGateway,
-];

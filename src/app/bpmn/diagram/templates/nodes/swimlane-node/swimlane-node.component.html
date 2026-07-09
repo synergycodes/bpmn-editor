@@ -1,0 +1,32 @@
+<ng-diagram-node-resize-adornment>
+  <div class="lane" ngDiagramNodeSelected ngDiagramGroupHighlighted [node]="node()">
+    <div class="lane__header" [style.width.px]="headerWidth">
+      <div class="lane__controls" data-no-drag="true" data-no-pan="true">
+        <button type="button" class="lane__btn" title="Move lane up" (click)="moveUp($event)">
+          <app-icon name="triangle-up" />
+        </button>
+        <button type="button" class="lane__btn" title="Move lane down" (click)="moveDown($event)">
+          <app-icon name="triangle-down" />
+        </button>
+      </div>
+      @if (editing()) {
+        <input
+          #editor
+          class="inline-editor lane__input"
+          type="text"
+          data-no-drag="true"
+          data-no-pan="true"
+          [value]="label()"
+          (dblclick)="$event.stopPropagation()"
+          (keydown.enter)="commit(editor.value)"
+          (keydown.escape)="cancel()"
+        />
+      } @else {
+        <span class="lane__title" (dblclick)="startEdit($event)" title="Double-click to rename">
+          {{ label() }}
+        </span>
+      }
+    </div>
+    <div class="lane__body"></div>
+  </div>
+</ng-diagram-node-resize-adornment>

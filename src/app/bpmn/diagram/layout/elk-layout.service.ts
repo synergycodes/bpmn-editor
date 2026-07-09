@@ -21,7 +21,7 @@ export interface LaneLayoutResult {
 export class ElkLayoutService {
   private readonly elk = new ELK();
 
-  /** Left-to-right layered layout. Ported from the Synergy Codes workflow apps. */
+  /** Left-to-right layered layout. */
   private readonly layoutOptions: Record<string, string> = {
     'elk.algorithm': 'layered',
     'elk.direction': 'RIGHT',

@@ -1,0 +1,32 @@
+<div class="task-node" ngDiagramNodeSelected [node]="node()">
+  <div class="task" [class.task--typed]="type() !== T.Task">
+    @switch (type()) {
+      @case (T.UserTask) { <app-icon class="task__icon" name="person" /> }
+      @case (T.ServiceTask) { <app-icon class="task__icon" name="gear" /> }
+    }
+
+    @if (editing()) {
+      <input
+        #editor
+        class="inline-editor task__input"
+        type="text"
+        data-no-drag="true"
+        data-no-pan="true"
+        [value]="label()"
+        (dblclick)="$event.stopPropagation()"
+        (keydown.enter)="commit(editor.value)"
+        (keydown.escape)="cancel()"
+      />
+    } @else {
+      <span class="task__label" (dblclick)="startEdit($event)" title="Double-click to rename">
+        {{ label() }}
+      </span>
+    }
+  </div>
+
+  <!-- Connection ports, all sides, bidirectional. -->
+  <ng-diagram-port id="top" type="both" side="top" />
+  <ng-diagram-port id="right" type="both" side="right" />
+  <ng-diagram-port id="bottom" type="both" side="bottom" />
+  <ng-diagram-port id="left" type="both" side="left" />
+</div>

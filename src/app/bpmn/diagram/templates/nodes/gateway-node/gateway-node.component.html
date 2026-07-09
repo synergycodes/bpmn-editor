@@ -1,0 +1,31 @@
+<div class="gateway-node" ngDiagramNodeSelected [node]="node()" (dblclick)="startEdit($event)">
+  <svg class="gateway" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+    <polygon points="50,3 97,50 50,97 3,50" class="gateway__shape" />
+  </svg>
+  @switch (type()) {
+    @case (T.ExclusiveGateway) { <app-icon class="gateway__mark" name="cross" /> }
+    @case (T.ParallelGateway) { <app-icon class="gateway__mark" name="plus" /> }
+  }
+
+  @if (editing()) {
+    <input
+      #editor
+      class="inline-editor gateway__input"
+      type="text"
+      data-no-drag="true"
+      data-no-pan="true"
+      [value]="label()"
+      (dblclick)="$event.stopPropagation()"
+      (keydown.enter)="commit(editor.value)"
+      (keydown.escape)="cancel()"
+    />
+  } @else if (label()) {
+    <span class="external-label" title="Double-click to rename">{{ label() }}</span>
+  }
+
+  <!-- Connection ports, all sides, bidirectional. -->
+  <ng-diagram-port id="top" type="both" side="top" />
+  <ng-diagram-port id="right" type="both" side="right" />
+  <ng-diagram-port id="bottom" type="both" side="bottom" />
+  <ng-diagram-port id="left" type="both" side="left" />
+</div>

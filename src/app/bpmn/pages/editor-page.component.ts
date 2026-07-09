@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { provideNgDiagram } from 'ng-diagram';
 import { DiagramComponent } from '../diagram/diagram.component';
 import { ElkLayoutService } from '../diagram/layout/elk-layout.service';
-import { SwimlaneService } from '../diagram/swimlane.service';
+import { SwimlaneService } from '../diagram/swimlanes/swimlane.service';
 import { PaletteComponent } from '../palette/palette.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 
@@ -18,32 +18,7 @@ import { ToolbarComponent } from '../toolbar/toolbar.component';
   imports: [ToolbarComponent, PaletteComponent, DiagramComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideNgDiagram(), ElkLayoutService, SwimlaneService],
-  template: `
-    <div class="editor">
-      <app-toolbar />
-      <div class="editor__body">
-        <app-palette />
-        <app-bpmn-diagram />
-      </div>
-    </div>
-  `,
-  styles: [
-    `
-      :host {
-        display: block;
-        height: 100%;
-      }
-      .editor {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-      }
-      .editor__body {
-        flex: 1 1 auto;
-        min-height: 0;
-        display: flex;
-      }
-    `,
-  ],
+  templateUrl: './editor-page.component.html',
+  styleUrl: './editor-page.component.scss',
 })
 export class EditorPageComponent {}

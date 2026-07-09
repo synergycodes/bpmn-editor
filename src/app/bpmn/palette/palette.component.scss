@@ -65,6 +65,12 @@ ng-diagram-palette-item {
 .tile:active {
   cursor: grabbing;
 }
+.tile__art app-icon,
+.tile-preview app-icon {
+  width: 24px;
+  height: 24px;
+}
+
 .tile__art {
   color: var(--c-text);
   display: flex;

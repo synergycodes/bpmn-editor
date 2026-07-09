@@ -1,0 +1,29 @@
+<div class="event-node" ngDiagramNodeSelected [node]="node()" (dblclick)="startEdit($event)">
+  @switch (type()) {
+    @case (T.StartEvent) { <span class="event event--start"></span> }
+    @case (T.EndEvent) { <span class="event event--end"></span> }
+    @case (T.IntermediateEvent) { <span class="event event--intermediate"></span> }
+  }
+
+  @if (editing()) {
+    <input
+      #editor
+      class="inline-editor event__input"
+      type="text"
+      data-no-drag="true"
+      data-no-pan="true"
+      [value]="label()"
+      (dblclick)="$event.stopPropagation()"
+      (keydown.enter)="commit(editor.value)"
+      (keydown.escape)="cancel()"
+    />
+  } @else if (label()) {
+    <span class="external-label" title="Double-click to rename">{{ label() }}</span>
+  }
+
+  <!-- Connection ports, all sides, bidirectional. -->
+  <ng-diagram-port id="top" type="both" side="top" />
+  <ng-diagram-port id="right" type="both" side="right" />
+  <ng-diagram-port id="bottom" type="both" side="bottom" />
+  <ng-diagram-port id="left" type="both" side="left" />
+</div>

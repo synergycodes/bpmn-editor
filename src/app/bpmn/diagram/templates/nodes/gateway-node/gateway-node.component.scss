@@ -1,0 +1,38 @@
+@use '../node-shared' as *;
+
+@include node-host;
+
+.gateway-node {
+  @include node-wrapper;
+  /* Center the x / + mark inside the diamond. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gateway {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.gateway__shape {
+  fill: var(--c-bpmn-node-fill);
+  stroke: var(--c-bpmn-node-stroke);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+.gateway__mark {
+  position: relative;
+  width: 42%;
+  height: 42%;
+  color: var(--c-bpmn-gateway);
+}
+
+.external-label {
+  @include external-label;
+}
+
+.gateway__input {
+  @include external-label-editor;
+}

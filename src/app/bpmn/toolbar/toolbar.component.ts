@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { NgDiagramService, NgDiagramViewportService } from 'ng-diagram';
 import { ThemeService } from '../../core/theme.service';
-import { SwimlaneService } from '../diagram/swimlane.service';
+import { IconComponent } from '../../shared/icons/icon.component';
+import { SwimlaneService } from '../diagram/swimlanes/swimlane.service';
 
 @Component({
   selector: 'app-toolbar',
   standalone: true,
+  imports: [IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.scss',

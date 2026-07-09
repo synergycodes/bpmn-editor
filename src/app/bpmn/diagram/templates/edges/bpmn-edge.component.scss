@@ -1,0 +1,32 @@
+/* Stroke styling through the engine's CSS hooks: the base edge adds the
+   .selected class and reads the --edge-* variables. */
+ng-diagram-base-edge {
+  --edge-stroke-width: 1.6;
+}
+ng-diagram-base-edge.selected {
+  --edge-stroke: var(--c-brand);
+  --edge-stroke-width: 2.2;
+}
+ng-diagram-base-edge.selected .edge-label {
+  border-color: var(--c-brand);
+}
+
+/* Mirrors the engine's default edge label */
+.edge-label {
+  display: flex;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  background: var(--ngd-default-edge-label-background-color);
+  color: var(--ngd-default-edge-label-color);
+  border: 1px solid var(--ngd-default-edge-label-border-color);
+  transition: border-color 0.1s ease-in-out;
+  cursor: text;
+}
+
+/* Skin comes from .inline-editor. */
+.edge-label-input {
+  width: 110px;
+  font-size: 12px;
+  padding: 4px 8px;
+}

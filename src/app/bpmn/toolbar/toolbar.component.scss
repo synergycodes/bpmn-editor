@@ -34,6 +34,12 @@
   font-size: var(--fs-11);
   color: var(--c-text-3);
   letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: color var(--t-fast);
+}
+.toolbar__sub:hover {
+  color: var(--c-brand);
+  text-decoration: underline;
 }
 
 .toolbar__actions {
@@ -55,7 +61,7 @@
   cursor: pointer;
   transition: background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
 }
-.btn svg {
+.btn app-icon {
   width: 16px;
   height: 16px;
 }

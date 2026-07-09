@@ -1,0 +1,28 @@
+<ng-diagram-base-edge
+  [edge]="edge()"
+  [strokeDasharray]="dasharray()"
+  [sourceArrowhead]="sourceArrow()"
+  [targetArrowhead]="targetArrow()"
+  [attr.title]="!label() && !editing() ? 'Double-click to add a label' : null"
+  (dblclick)="startEdit($event)"
+>
+  @if (editing() || label()) {
+    <ng-diagram-base-edge-label [id]="edge().id + '-label'" [positionOnEdge]="0.5">
+      @if (editing()) {
+        <input
+          #editor
+          class="inline-editor edge-label-input"
+          type="text"
+          data-no-drag="true"
+          data-no-pan="true"
+          [value]="label()"
+          (dblclick)="$event.stopPropagation()"
+          (keydown.enter)="commit(editor.value)"
+          (keydown.escape)="cancel()"
+        />
+      } @else {
+        <span class="edge-label" title="Double-click to rename">{{ label() }}</span>
+      }
+    </ng-diagram-base-edge-label>
+  }
+</ng-diagram-base-edge>

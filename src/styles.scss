@@ -9,11 +9,33 @@ ng-diagram {
   display: block;
 }
 
+/* Engine bridge — point ngDiagram's themable tokens at the brand. Placed
+   after the engine import so it wins the cascade over its :root defaults. */
+:root {
+  --ngd-resize-line-border-color: var(--c-brand);
+  --ngd-resize-handle-background-color: var(--c-surface-2);
+  --ngd-resize-handle-border-color: var(--c-brand);
+  --ngd-resize-handle-border-radius: 2px;
+}
+
 /* ng-diagram mirrors resize.getMinNodeSize as an inline min-width/min-height on
    the node host; zero it so lanes always render at their model size. */
 ng-diagram-node:has(.lane) {
   min-width: 0 !important;
   min-height: 0 !important;
+}
+
+/* Shared skin for every inline label editor (nodes, lanes, edges) — the
+   per-component classes add only sizing and positioning. */
+.inline-editor {
+  border: none;
+  outline: none;
+  background: var(--c-field-bg);
+  color: var(--c-text);
+  font: inherit;
+  text-align: center;
+  border-radius: var(--r-xs);
+  box-shadow: 0 0 0 2px var(--c-focus-ring);
 }
 
 /* Thin, themed scrollbars for chrome panels. */
