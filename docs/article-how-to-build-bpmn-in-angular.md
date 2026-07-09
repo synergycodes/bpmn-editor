@@ -14,7 +14,7 @@ The editor breaks down into 9 features, and each one maps to one ngDiagram API:
 4. **Edges and arrowheads** – `ng-diagram-base-edge` plus SVG markers
 5. **A drag-and-drop palette** – plain data objects inside `<ng-diagram-palette-item>`
 6. **Swimlanes** – group nodes (`isGroup`), membership rules, `NgDiagramGroupsService`
-7. **Editor rules** – one typed config: connection checks, edge creation, resize limits
+7. **Editor rules** – one typed config: connection checks, edge creation, resize limits, routing
 8. **Auto-layout** – bring your own engine (elkjs)
 9. **Theming** – `--ngd-*` CSS variables
 
@@ -145,8 +145,7 @@ export type BpmnEdge = Edge<BpmnEdgeData>;
 
 The aliases at the end hand these interfaces to ngDiagram's generics. From here on, every API that touches a node – templates, updates, event payloads – sees `Node<BpmnNodeData>`, so a typo in a field name fails at compile time instead of rendering a broken node.
 
-2 of these fields matter later. The edge `kind` picks the line style in step 4. The lane `order` drives the vertical stacking in step 6.
-
+The edge `kind` comes back in step 4, where it picks the line style, and the lane `order` drives the vertical stacking in step 6.
 
 ## Step 3 – nodes are Angular components
 
@@ -173,7 +172,7 @@ A port's `type` takes `source`, `target`, or `both` and controls whether a conne
 
 ### The editable label
 
-Now the custom part – the markup in the middle. The label is editable inline: a double-click swaps the text for a native `<input>`, and 2 ngDiagram attributes make an input inside a node usable – `data-no-drag` and `data-no-pan` keep typing from dragging the node or panning the canvas. (`.inline-editor` carries the field's styling and `<app-icon>` renders from the app's SVG sprite – see the repo.)
+Now the custom part – the markup in the middle. The label is editable inline: a double-click swaps the text for a native `<input>`, and 2 ngDiagram attributes make an input inside a node usable – `data-no-drag` and `data-no-pan` keep typing from dragging the node or panning the canvas. The editing state (`editing()`, `commit`, `cancel`) comes from a shared app directive, explained below the template. (`.inline-editor` carries the field's styling and `<app-icon>` renders from the app's SVG sprite – see [the repo](https://github.com/synergycodes/bpmn-editor).)
 
 ```html
 <!-- task-node.component.html – the markup inside the wrapper -->
@@ -247,7 +246,7 @@ export abstract class BpmnElementNode
 }
 ```
 
-The editing state machine itself – enter on double-click, focus the field, save on Enter or a press outside, cancel on Escape – lives one level higher in `InlineEditableLabel`, a small app directive shared by all node and edge templates; a host plugs in by implementing `saveLabel` (see the repo).
+The editing state machine itself – enter on double-click, focus the field, save on Enter or a press outside, cancel on Escape – lives one level higher in `InlineEditableLabel`, a small app directive shared by all node and edge templates; a host plugs in by implementing `saveLabel` (see [the repo](https://github.com/synergycodes/bpmn-editor)).
 
 `EventNodeComponent` and `GatewayNodeComponent` are the same kind of shell: their templates `@switch` on the node type to pick the glyph – a circle style per event type, a diamond with an x or + mark – with the editable label below it. Both are in the repo.
 
@@ -368,6 +367,8 @@ ng-diagram-base-edge.selected {
   --edge-stroke: var(--c-brand);
   --edge-stroke-width: 2.2;
 }
+
+/* (label chip styles – see the repo) */
 ```
 
 ### Arrowheads
@@ -405,7 +406,7 @@ protected readonly targetArrow = computed(() => {
 
 ### Registration and routing
 
-The edge component registers in an `NgDiagramEdgeTemplateMap`, exactly like the node map in step 3 (see the repo). Orthogonal routing – the standard style for BPMN diagrams – is one line in step 7's config: `edgeRouting: { defaultRouting: 'orthogonal' }`.
+The edge component registers in an `NgDiagramEdgeTemplateMap`, exactly like the node map in step 3 (see [the repo](https://github.com/synergycodes/bpmn-editor)). Orthogonal routing – the standard style for BPMN diagrams – is one line in step 7's config: `edgeRouting: { defaultRouting: 'orthogonal' }`.
 
 **In the app:** double-click an edge to give it a label. Select the edge – the stroke and the arrowhead turn brand-colored.
 
@@ -650,7 +651,7 @@ this.viewport.zoomToFit({ padding: 60 });
 
 ## Step 9 – theming with CSS tokens
 
-The whole editor themes from one attribute: `data-theme` on `<html>`. Two sets of CSS variables react to it – the app's own design tokens and ngDiagram's `--ngd-*` tokens, which ship with a light and a dark theme built in. A small `ThemeService` writes the attribute and persists the choice; the toolbar button toggles it (see the repo).
+The whole editor themes from one attribute: `data-theme` on `<html>`. Two sets of CSS variables react to it – the app's own design tokens and ngDiagram's `--ngd-*` tokens, which ship with a light and a dark theme built in. A small `ThemeService` writes the attribute and persists the choice; the toolbar button toggles it (see [the repo](https://github.com/synergycodes/bpmn-editor)).
 
 The app tokens live in `src/tokens.css`. Components use semantic names, and each theme block points those names at different colors – flipping the attribute recolors every shape:
 
