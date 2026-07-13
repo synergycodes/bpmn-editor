@@ -6,6 +6,10 @@
 
 Interactive BPMN process editor built with Angular 19 and [ng-diagram](https://www.npmjs.com/package/ng-diagram). Use this project as a starting point for building your own process editor. Minimal dependencies: only Angular, ng-diagram, and ELK.js, with no opinionated third-party UI libraries.
 
+> ### 📖 Read the tutorial
+>
+> This repository is the complete companion code for the step-by-step article **[How to Build a BPMN Editor in Angular with ng-diagram](https://dev.to/ngdiagram-dev/how-to-build-a-bpmn-editor-in-angular-with-ngdiagram-4id0)**. The article walks through the whole build and doubles as a hands-on ng-diagram tutorial — read it alongside this code to see how each piece comes together.
+
 Features:
 
 - 9 BPMN shapes: start / end / intermediate events, task / user / service activities, exclusive / parallel gateways, swimlanes
