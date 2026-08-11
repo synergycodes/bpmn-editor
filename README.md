@@ -60,8 +60,10 @@ This template exercises a broad slice of the ng-diagram public surface, useful a
 | Port hover styling | `ng-diagram-port-hoverable-over-node` host class | `bpmn/diagram/templates/nodes/bpmn-element-node.ts` |
 | Palette | `<ng-diagram-palette-item>`, `<ng-diagram-palette-item-preview>`, `NgDiagramPaletteItem` | `bpmn/palette/` |
 | Model init | `initializeModel()` | `bpmn/diagram/diagram.component.ts` |
-| Model reads | `NgDiagramModelService` (`getModel()` for committed reads, `edges()`, `getChildren`) | `bpmn/diagram/swimlanes/swimlane.service.ts` |
+| Model reads | `NgDiagramModelService` (`getModel().getNodes()` / `getEdges()` for committed reads, `getChildren`) | `bpmn/diagram/swimlanes/swimlane.service.ts` |
 | Model writes | `NgDiagramModelService` (`updateNode`, `updateNodes`, `updateNodeData`, `updateEdgeData`) | `bpmn/diagram/swimlanes/`, `bpmn/diagram/templates/` |
+| Node commands | `NgDiagramNodeService.resizeNode` (works on unselected groups since 1.3) | `bpmn/diagram/swimlanes/swimlane.service.ts` |
+| Resize adornment sides | `<ng-diagram-node-resize-adornment>` `activeSides` input | `bpmn/diagram/templates/nodes/swimlane-node/` |
 | Grouping | `NgDiagramGroupsService.addToGroup` | `bpmn/diagram/diagram.component.ts` |
 | Editor rules | `NgDiagramConfig`: `edgeRouting.defaultRouting`, `resize.getMinNodeSize`, `resize.allowResizeBelowChildrenBounds`, `grouping.canGroup`, `linking.validateConnection`, `linking.finalEdgeDataBuilder` | `bpmn/diagram/diagram-config.ts` |
 | Template-output events | `(paletteItemDropped)`, `(nodeResized)` | `bpmn/diagram/diagram.component.html` |
@@ -159,12 +161,11 @@ src/app/
 
 ## Known ng-diagram Issues
 
-The template contains a few workarounds driven by current library gaps. Resolving these would let us simplify the template.
+The template contains a workaround driven by a current library gap. Resolving it would let us simplify the template.
 
-- **No API to choose which edges of the resize adornment are active.** Lanes anchor to the top-left of the stack, so top/left resize would fight the re-stacking. *Workaround:* `::ng-deep` CSS in `swimlane-node.component.scss` disables the top/left lines and hides the unused corner handles.
 - **Group hosts mirror `resize.getMinNodeSize` as inline `min-width`/`min-height`.** For lanes that minimum is content-driven and would visually inflate the lane beyond its model size. *Workaround:* a global rule zeroes the inline minimum for lanes (`src/styles.scss`).
 
-All of the above have been reported to the ng-diagram team. The template works today and is fully usable as-is.
+This has been reported to the ng-diagram team. The template works today and is fully usable as-is.
 
 ## ng-diagram Documentation
 

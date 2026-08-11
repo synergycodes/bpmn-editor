@@ -66,8 +66,9 @@ export class DiagramComponent {
     if (lane) this.groups.addToGroup(lane.id, [node.id]);
   }
 
-  // Fires on every tick of a resize gesture: the other lanes follow the resized one live — 
-  // widths stay equal, the stack stays flush.
+  // Fires on every tick of a resize gesture AND once per programmatic
+  // resizeNode — onLaneAdded's width adoption relies on the latter: the other
+  // lanes follow the resized one live, widths stay equal, the stack stays flush.
   onNodeResized(event: NodeResizedEvent): void {
     if (isSwimlane(event.node)) {
       this.swimlanes.onLaneResized(event.node);

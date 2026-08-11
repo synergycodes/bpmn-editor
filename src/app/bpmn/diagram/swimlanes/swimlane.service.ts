@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { NgDiagramModelService, type Node, type Size } from 'ng-diagram';
+import { NgDiagramModelService, NgDiagramNodeService, type Node, type Size } from 'ng-diagram';
 import {
   isBpmnElement,
   isLayoutEdge,
@@ -22,6 +22,7 @@ import { computeStackUpdates, type NodeUpdate } from './lane-stacking';
 @Injectable()
 export class SwimlaneService {
   private readonly model = inject(NgDiagramModelService);
+  private readonly nodeService = inject(NgDiagramNodeService);
   private readonly elk = inject(ElkLayoutService);
 
   private readonly childrenOf = (laneId: string) => this.model.getChildren(laneId);
@@ -40,7 +41,10 @@ export class SwimlaneService {
     const lanes = this.lanes();
     if (lanes.length === 0) return;
 
-    const layoutEdges = this.model.edges().filter((e) => isLayoutEdge(e as BpmnEdge));
+    const layoutEdges = this.model
+      .getModel()
+      .getEdges()
+      .filter((e) => isLayoutEdge(e as BpmnEdge));
 
     // Layout each lane's children independently (cross-lane edges ignored).
     const perLane = await Promise.all(
@@ -116,15 +120,18 @@ export class SwimlaneService {
       ? Math.max(...others.map((l) => l.size?.width ?? 0))
       : (lane.size?.width ?? LANE_DEFAULT_SIZE.width);
 
-    // Lanes never move by hand — only via reorder / layout. The shared width
-    // is written directly to the model: the engine's resizeNode command
-    // ignores groups that are not selected, and a fresh drop is not.
-    this.model.updateNode(lane.id, {
-      draggable: false,
-      size: { width, height: lane.size?.height ?? LANE_DEFAULT_SIZE.height },
-    });
+    // Lanes never move by hand — only via reorder / layout.
+    void this.model.updateNode(lane.id, { draggable: false });
 
     // Deterministic order: existing lanes (by order) then the new one last.
+    // Stack before resizing — resizeNode emits nodeResized, and onLaneResized
+    // re-stacks from the committed order; resizing first would let that
+    // handler see the lane's palette order of -1 and stack it to the top
+    // instead of its bottom slot.
     this.arrangeLanes([...others, lane]);
+    void this.nodeService.resizeNode(lane.id, {
+      width,
+      height: lane.size?.height ?? LANE_DEFAULT_SIZE.height,
+    });
   }
 }
