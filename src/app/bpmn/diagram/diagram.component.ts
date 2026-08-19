@@ -8,6 +8,7 @@ import {
   NgDiagramEdgeTemplateMap,
   NgDiagramNodeTemplateMap,
   type NodeResizedEvent,
+  type NodeResizeEndedEvent,
   type PaletteItemDroppedEvent,
 } from 'ng-diagram';
 import {
@@ -66,10 +67,21 @@ export class DiagramComponent {
     if (lane) this.groups.addToGroup(lane.id, [node.id]);
   }
 
-  // Fires on every tick of a resize gesture: the other lanes follow the resized one live — 
-  // widths stay equal, the stack stays flush.
+  // Fires on every tick of a resize gesture AND once per programmatic
+  // resizeNode — onLaneAdded's width adoption relies on the latter: the other
+  // lanes follow the resized one live, widths stay equal, the stack stays flush.
   onNodeResized(event: NodeResizedEvent): void {
     if (isSwimlane(event.node)) {
+      this.swimlanes.onLaneResized(event.node);
+    }
+  }
+
+  // A cancelled resize rolls back only the gestured lane — the engine knows
+  // nothing about the width-sync/stack writes made to the OTHER lanes on each
+  // tick (and its rollback doesn't re-fire nodeResized). Re-derive them from
+  // the restored lane so the whole stack snaps back.
+  onNodeResizeEnded(event: NodeResizeEndedEvent): void {
+    if (event.cancelReason && isSwimlane(event.node)) {
       this.swimlanes.onLaneResized(event.node);
     }
   }

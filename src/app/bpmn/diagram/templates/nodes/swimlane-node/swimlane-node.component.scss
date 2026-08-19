@@ -4,21 +4,6 @@
   height: 100%;
 }
 
-/* Only the right and bottom edges resize a lane. Remove once the adornment
-   API supports configurable resize edges. */
-:host ::ng-deep {
-  .resize-line--top,
-  .resize-line--left {
-    pointer-events: none;
-  }
-
-  .resize-handle--top-left,
-  .resize-handle--top-right,
-  .resize-handle--bottom-left {
-    display: none;
-  }
-}
-
 .lane {
   position: relative;
   width: 100%;
