@@ -1,20 +1,22 @@
-# ng-diagram BPMN Editor Template
+# ngDiagram BPMN Editor Template
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/licenses/MIT)
 
-**[Live Demo](https://synergycodes.github.io/bpmn-editor/)**
+**Live demo:** [synergycodes.github.io/bpmn-editor](https://synergycodes.github.io/bpmn-editor/)
 
-Interactive BPMN process editor built with Angular 19 and [ng-diagram](https://www.npmjs.com/package/ng-diagram). Use this project as a starting point for building your own process editor. Minimal dependencies: only Angular, ng-diagram, and ELK.js, with no opinionated third-party UI libraries.
+![BPMN editor — an order process across three swimlanes (Customer, Order Service, Warehouse) with user and service tasks, exclusive and parallel gateways, sequence and message flows, and the shape palette on the left](docs/assets/demo.png)
+
+Interactive BPMN process editor built with Angular 19 and [ngDiagram](https://www.ngdiagram.dev/). Use this project as a starting point for building your own process editor. Lean dependencies: Angular, ngDiagram, and ELK.js — no opinionated third-party UI libraries.
 
 > ### 📖 Read the tutorial
 >
-> This repository is the complete companion code for the step-by-step article **[How to Build a BPMN Editor in Angular with ng-diagram](https://dev.to/ngdiagram-dev/how-to-build-a-bpmn-editor-in-angular-with-ngdiagram-4id0)**. The article walks through the whole build and doubles as a hands-on ng-diagram tutorial — read it alongside this code to see how each piece comes together.
+> This repository is the complete companion code for the step-by-step article **[How to build a BPMN editor in Angular with ngDiagram](https://dev.to/ngdiagram-dev/how-to-build-a-bpmn-editor-in-angular-with-ngdiagram-4id0)**. The article walks through the whole build and doubles as a hands-on ngDiagram tutorial — read it alongside this code to see how each piece comes together.
 
 Features:
 
 - 9 BPMN shapes: start / end / intermediate events, task / user / service activities, exclusive / parallel gateways, swimlanes
 - 3 typed connection styles: sequence flow, message flow, association — every user-drawn edge becomes a typed sequence flow
-- Swimlanes as ng-diagram groups: drop-zone highlighting, auto-parenting on drop, reorder buttons, shared width
+- Swimlanes as ngDiagram groups: drop-zone highlighting, auto-parenting on drop, reorder buttons, shared width
 - Live lane resize: while one lane is dragged, the others follow tick by tick — widths stay equal, the stack stays flush
 - Per-lane auto-layout powered by [ELK.js](https://www.npmjs.com/package/elkjs) (never automatic — a toolbar button)
 - Inline label editing everywhere: tasks, events, gateways, lane titles, and edge labels (double-click)
@@ -24,14 +26,16 @@ Features:
 
 ## Getting Started
 
-**Prerequisites:** Node.js v18.19+, v20.11+ or v22+, npm 10+
+Built against Angular 19.2 and ngDiagram 1.3 (see `package.json`); Node.js 18.19+, 20.11+ or 22 and npm 10+.
 
 ```bash
+git clone https://github.com/synergycodes/bpmn-editor.git
+cd bpmn-editor
 npm install
 npm start
 ```
 
-Open [http://localhost:4200](http://localhost:4200).
+Open [http://localhost:4200](http://localhost:4200) — a demo process across three swimlanes loads (18 elements, 20 flows). Try dragging a task from the palette into a lane, double-clicking it to rename it, then pressing **Layout** in the toolbar. The demo process is seed data — replace it in [`bpmn/diagram/bpmn-seed.ts`](src/app/bpmn/diagram/bpmn-seed.ts).
 
 ## Scripts
 
@@ -41,9 +45,9 @@ Open [http://localhost:4200](http://localhost:4200).
 | `npm run build` | Production build to `dist/` |
 | `npm run format` | Format code with Prettier |
 
-## ng-diagram APIs Demonstrated
+## ngDiagram APIs Demonstrated
 
-This template exercises a broad slice of the ng-diagram public surface, useful as a reference for which APIs to reach for in your own integration.
+This template exercises a broad slice of the ngDiagram public surface, useful as a reference for which APIs to reach for in your own integration.
 
 | Concern | API | Where in this repo |
 |---|---|---|
@@ -94,10 +98,10 @@ Theme is driven by the `data-theme` attribute on `<html>` (`"light"` or `"dark"`
 
 Color tokens are defined in `src/tokens.css` in two tiers:
 
-- **Primitives** (`--prim-*`) — raw color ramps, aligned with the ng-diagram design system (the purple accent is the engine's `acc1`).
+- **Primitives** (`--prim-*`) — raw color ramps, aligned with the ngDiagram design system (the purple accent is the engine's `acc1`).
 - **Semantic** (`--c-*`) — per-theme aliases; components use only these.
 
-ng-diagram's own `--ngd-*` tokens key on the same `data-theme` attribute, so both worlds flip together. App-level overrides of engine tokens (resize adornment colors) live in `src/styles.scss` under the "engine bridge" section.
+ngDiagram's own `--ngd-*` tokens key on the same `data-theme` attribute, so both worlds flip together. App-level overrides of engine tokens (resize adornment colors) live in `src/styles.scss` under the "engine bridge" section.
 
 ### Layout Engine
 
@@ -113,7 +117,7 @@ To swap ELK for another engine, replace `elk-layout.service.ts` with anything of
 
 ### Service Hierarchy
 
-All diagram-scoped services are provided at the page component level (`EditorPageComponent`), not the application root — the ng-diagram services attach to the diagram's DOM subtree.
+All diagram-scoped services are provided at the page component level (`EditorPageComponent`), not the application root — the ngDiagram services attach to the diagram's DOM subtree.
 
 ```
 EditorPageComponent (providers)
@@ -155,32 +159,31 @@ src/app/
 ## Tech Stack
 
 - **Angular 19** — standalone components, signals, OnPush change detection
-- **ng-diagram** — diagram rendering, viewport management, groups, selection
+- **ngDiagram** ([`ng-diagram`](https://www.npmjs.com/package/ng-diagram) on npm) — diagram rendering, viewport management, groups, selection
 - **ELK.js** — layered auto-layout inside lanes
 - **Prettier** — code formatting
 
-## Known ng-diagram Issues
+## Known ngDiagram Issues
 
 The template contains a workaround driven by a current library gap. Resolving it would let us simplify the template.
 
 - **Group hosts mirror `resize.getMinNodeSize` as inline `min-width`/`min-height`.** For lanes that minimum is content-driven and would visually inflate the lane beyond its model size. *Workaround:* a global rule zeroes the inline minimum for lanes (`src/styles.scss`).
 
-This has been reported to the ng-diagram team. The template works today and is fully usable as-is.
+This has been reported to the ngDiagram team. The template works today and is fully usable as-is.
 
-## ng-diagram Documentation
+## ngDiagram Documentation
 
-For comprehensive ng-diagram documentation, examples, and API reference, visit: **[ngdiagram.dev/docs](https://www.ngdiagram.dev/docs)**
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+For comprehensive ngDiagram documentation, examples, and API reference, visit: **[ngdiagram.dev/docs](https://www.ngdiagram.dev/docs)**
 
 ## Support
 
 - **Issues**: [GitHub Issues](https://github.com/synergycodes/bpmn-editor/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/synergycodes/bpmn-editor/discussions)
-- **ng-diagram Discussions**: [GitHub Discussions](https://github.com/synergycodes/ng-diagram/discussions), [Discord](https://discord.gg/FDMjRuarFb)
-- **ng-diagram Documentation**: [ngdiagram.dev/docs](https://www.ngdiagram.dev/docs)
+- **ngDiagram Discussions**: [GitHub Discussions](https://github.com/synergycodes/ng-diagram/discussions), [Discord](https://discord.gg/FDMjRuarFb)
+- **ngDiagram Documentation**: [ngdiagram.dev/docs](https://www.ngdiagram.dev/docs)
+
+## License
+
+MIT — see [LICENSE](LICENSE).
 
 ---
 
